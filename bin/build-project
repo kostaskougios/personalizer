@@ -1,0 +1,13 @@
+if [ "$#" -ne 1 ]; then
+    echo "please provide project name, i.e. sql"
+    exit -1
+fi
+
+PROJECT=$1
+
+echo "Building $PROJECT"
+
+sbt "clean" "project $PROJECT" "pack"
+
+# Make it look like a spark distro
+mv $PROJECT/target/pack/lib $PROJECT/target/pack/jars
