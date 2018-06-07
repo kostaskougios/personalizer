@@ -60,7 +60,7 @@ lazy val collectorService = project.settings(commonSettings: _*).settings(
 			Kafka.Clients
 		)
 	}
-)
+).dependsOn(model % "test->test;compile->compile", avro % "test->test;compile->compile")
 
 lazy val experiments = project.settings(commonSettings: _*).settings(
 	libraryDependencies ++= {
