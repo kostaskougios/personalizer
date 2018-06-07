@@ -6,5 +6,5 @@ package com.aktit.personalizer.channels
   */
 trait Channel
 {
-	def send(o: Array[Byte]): Unit
+	def send(data: Array[Byte]): Unit
 }

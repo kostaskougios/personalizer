@@ -1,7 +1,8 @@
-package com.aktit.personalizer.channels
+package com.aktit.personalizer.channels.kafka
 
 import java.util.Properties
 
+import com.aktit.personalizer.channels.{Bytes, Channel}
 import org.apache.kafka.clients.producer.{KafkaProducer, ProducerRecord}
 import org.apache.kafka.common.serialization.IntegerSerializer
 
@@ -11,16 +12,9 @@ import org.apache.kafka.common.serialization.IntegerSerializer
   */
 class KafkaChannel private(kafkaTopic: String, producer: KafkaProducer[Integer, Bytes]) extends Channel
 {
-	override def send(o: Array[Byte]): Unit = {
-		val r = new ProducerRecord[Integer, Bytes](kafkaTopic, o)
+	override def send(data: Array[Byte]): Unit = {
+		val r = new ProducerRecord[Integer, Bytes](kafkaTopic, data)
 		producer.send(r)
-	}
-
-	/**
-	  * This has to be called when the channel is not needed anymore
-	  */
-	def destroy(): Unit = {
-		producer.close()
 	}
 
 }
@@ -33,17 +27,28 @@ object KafkaChannel
 	  * @param brokers a list of brokers in the form of "server.lan:9092"
 	  * @return the KafkaProducer
 	  */
-	def producer(brokers: Seq[String]): KafkaProducer[Integer, Bytes] = {
+	def factory(brokers: Seq[String]): Factory = {
 		val props = new Properties()
 		props.put("bootstrap.servers", brokers.mkString(","))
 		props.put("client.id", getClass.getSimpleName)
 		props.put("key.serializer", classOf[IntegerSerializer])
-		props.put("value.serializer", classOf[RowSerializer])
+		props.put("value.serializer", classOf[NopSerializer])
 
-		new KafkaProducer[Integer, Bytes](props)
+		val producer = new KafkaProducer[Integer, Bytes](props)
+		new Factory(producer)
 	}
 
-	def apply(kafkaTopic: String, producer: KafkaProducer[Integer, Bytes]): Channel = {
-		new KafkaChannel(kafkaTopic, producer)
+	class Factory(producer: KafkaProducer[Integer, Bytes])
+	{
+		def channel(kafkaTopic: String): Channel = {
+			new KafkaChannel(kafkaTopic, producer)
+		}
+
+		/**
+		  * This has to be called when the channels are not needed anymore.
+		  */
+		def destroy(): Unit = {
+			producer.close()
+		}
 	}
 }

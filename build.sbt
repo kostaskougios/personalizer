@@ -62,6 +62,17 @@ lazy val producers = project.settings(commonSettings: _*).settings(
 	}
 ).dependsOn(model % "test->test;compile->compile", avro % "test->test;compile->compile")
 
+lazy val kafkaProducers = project.settings(commonSettings: _*).settings(
+	libraryDependencies ++= {
+		Seq(
+			Libraries.ScalaTest,
+			Libraries.Apache.Lang3,
+			Libraries.Apache.CommonsIO,
+			Kafka.Clients
+		)
+	}
+).dependsOn(producers % "test->test;compile->compile")
+
 lazy val experiments = project.settings(commonSettings: _*).settings(
 	libraryDependencies ++= {
 		Seq(
