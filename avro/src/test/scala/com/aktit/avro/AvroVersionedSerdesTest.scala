@@ -18,7 +18,7 @@ class AvroVersionedSerdesTest extends FunSuite
 		"""
 		  |{
 		  |  "type" : "record",
-		  |  "name" : "XV2",
+		  |  "name" : "XV1",
 		  |  "namespace" : "com.aktit.avro.testdtos",
 		  |  "fields" : [ {
 		  |    "name" : "i",

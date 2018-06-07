@@ -34,8 +34,8 @@ class AvroVersionedSerdes[T: SchemaFor : ToRecord : FromRecord](
 		val ais = if (version == currentVersion) {
 			AvroInputStream.binary[T](in)
 		} else {
-			val schema = versions(version)
-			AvroInputStream.binary[T](in, schema)
+			val schema = Some(versions(version))
+			new AvroBinaryInputStream(in, schema, schema)
 		}
 		try ais.iterator.toSeq finally ais.close()
 	}
