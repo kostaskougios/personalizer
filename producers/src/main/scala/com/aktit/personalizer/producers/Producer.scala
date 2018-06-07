@@ -1,4 +1,4 @@
-package com.aktit.personalizer.service
+package com.aktit.personalizer.producers
 
 import com.aktit.avro.AvroVersionedSerdes
 import com.aktit.personalizer.channels.Channel
@@ -9,7 +9,7 @@ import com.aktit.personalizer.channels.Channel
   * @author kostas.kougios
   *         07/06/18 - 17:51
   */
-class ProducerService[TABLE] private(channel: Channel, latestVersionSerdes: AvroVersionedSerdes[TABLE])
+class Producer[TABLE] private(channel: Channel, latestVersionSerdes: AvroVersionedSerdes[TABLE])
 {
 
 	def produce(row: TABLE): Unit = {
@@ -19,16 +19,16 @@ class ProducerService[TABLE] private(channel: Channel, latestVersionSerdes: Avro
 
 }
 
-object ProducerService
+object Producer
 {
-	def apply[TABLE](channel: Channel, allSerdes: Seq[AvroVersionedSerdes[TABLE]]): ProducerService[TABLE] = {
+	def apply[TABLE](channel: Channel, allSerdes: Seq[AvroVersionedSerdes[TABLE]]): Producer[TABLE] = {
 		// we always produce using the latest version
 		val serdes = allSerdes.maxBy(_.version)
 		apply(channel, serdes)
 
 	}
 
-	def apply[TABLE](channel: Channel, latestVersionSerdes: AvroVersionedSerdes[TABLE]): ProducerService[TABLE] = {
-		new ProducerService(channel, latestVersionSerdes)
+	def apply[TABLE](channel: Channel, latestVersionSerdes: AvroVersionedSerdes[TABLE]): Producer[TABLE] = {
+		new Producer(channel, latestVersionSerdes)
 	}
 }

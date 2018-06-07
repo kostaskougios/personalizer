@@ -6,6 +6,8 @@ import com.aktit.personalizer.channels.{Bytes, Channel}
 import org.apache.kafka.clients.producer.{KafkaProducer, ProducerRecord}
 import org.apache.kafka.common.serialization.IntegerSerializer
 
+import scala.reflect.{ClassTag, classTag}
+
 /**
   * @author kostas.kougios
   *         07/06/18 - 23:39
@@ -40,6 +42,8 @@ object KafkaChannel
 
 	class Factory(producer: KafkaProducer[Integer, Bytes])
 	{
+		def channel[TABLE: ClassTag]: Channel = channel(classTag[TABLE].runtimeClass.getSimpleName)
+
 		def channel(kafkaTopic: String): Channel = {
 			new KafkaChannel(kafkaTopic, producer)
 		}
@@ -47,7 +51,7 @@ object KafkaChannel
 		/**
 		  * This has to be called when the channels are not needed anymore.
 		  */
-		def destroy(): Unit = {
+		def close(): Unit = {
 			producer.close()
 		}
 	}

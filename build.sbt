@@ -26,7 +26,7 @@ lazy val common = project.settings(commonSettings: _*).settings(
 			Libraries.ScalaTest,
 			Libraries.Apache.Lang3,
 			Libraries.Apache.CommonsIO
-		) ++ Spark.Core
+		)
 	}
 )
 
@@ -56,8 +56,7 @@ lazy val producers = project.settings(commonSettings: _*).settings(
 		Seq(
 			Libraries.ScalaTest,
 			Libraries.Apache.Lang3,
-			Libraries.Apache.CommonsIO,
-			Kafka.Clients
+			Libraries.Apache.CommonsIO
 		)
 	}
 ).dependsOn(model % "test->test;compile->compile", avro % "test->test;compile->compile")
@@ -93,5 +92,5 @@ lazy val exampleSocialNetwork = project.settings(commonSettings: _*).settings(
 			Libraries.Apache.CommonsIO
 		) ++ Spark.Core
 	}
-).dependsOn(common % "test->test;compile->compile", model % "test->test;compile->compile", avro)
+).dependsOn(producers, kafkaProducers)
 	.enablePlugins(PackPlugin)
