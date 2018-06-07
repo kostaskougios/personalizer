@@ -58,10 +58,7 @@ val PhoenixVersion = "5.0.0-alpha-HBase-2.0"
 	object Libraries
 	{
 		val Config = "com.typesafe" % "config" % "1.3.0"
-		val Joda = "joda-time" % "joda-time" % "2.9.9"
-		val JodaConvert = "org.joda" % "joda-convert" % "1.8.1"
 		val ScalaTest = "org.scalatest" %% "scalatest" % "3.0.5" % "test"
-		val Mockito = "org.mockito" % "mockito-all" % "1.10.19" % "test"
 		val Avro4S = "com.sksamuel.avro4s" %% "avro4s-core" % "1.8.3"
 
 		val PhoenixClient = Seq(

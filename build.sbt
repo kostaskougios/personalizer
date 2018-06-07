@@ -24,7 +24,6 @@ lazy val common = project.settings(commonSettings: _*).settings(
 	libraryDependencies ++= {
 		Seq(
 			Libraries.ScalaTest,
-			Libraries.Mockito,
 			Libraries.Apache.Lang3,
 			Libraries.Apache.CommonsIO
 		) ++ Spark.Core
@@ -56,7 +55,6 @@ lazy val xml = project.settings(commonSettings: _*).settings(
 	libraryDependencies ++= {
 		Seq(
 			Libraries.ScalaTest,
-			Libraries.Mockito,
 			Libraries.Apache.CommonsIO,
 			Libraries.Apache.Lang3
 		) ++ Scala.Xml
@@ -64,12 +62,9 @@ lazy val xml = project.settings(commonSettings: _*).settings(
 ).dependsOn(common % "test->test;compile->compile")
 
 lazy val kafka = project.settings(commonSettings: _*).settings(
-	//	xerial.sbt.Pack.packAutoSettings,
 	libraryDependencies ++= {
 		Seq(
 			Libraries.ScalaTest,
-			Libraries.Mockito,
-			Libraries.JodaConvert,
 			Spark.Streaming,
 			Kafka.SparkStreaming,
 			Kafka.Clients,
@@ -83,12 +78,9 @@ lazy val kafka = project.settings(commonSettings: _*).settings(
 	.enablePlugins(PackPlugin)
 
 lazy val experiments = project.settings(commonSettings: _*).settings(
-	//	xerial.sbt.Pack.packAutoSettings,
 	libraryDependencies ++= {
 		Seq(
 			Libraries.ScalaTest,
-			Libraries.Mockito,
-			Libraries.JodaConvert,
 			Spark.Sql,
 			Libraries.Apache.Lang3,
 			Libraries.Apache.CommonsIO
@@ -98,15 +90,23 @@ lazy val experiments = project.settings(commonSettings: _*).settings(
 	.enablePlugins(PackPlugin)
 
 lazy val loaders = project.settings(commonSettings: _*).settings(
-	//	xerial.sbt.Pack.packAutoSettings,
 	libraryDependencies ++= {
 		Seq(
 			Libraries.ScalaTest,
-			Libraries.Mockito,
-			Libraries.JodaConvert,
 			Libraries.Apache.Lang3,
 			Libraries.Apache.CommonsIO
 		) ++ Spark.Core
 	}
 ).dependsOn(common % "test->test;compile->compile", model, xml)
+	.enablePlugins(PackPlugin)
+
+lazy val exampleSocialNetwork = project.settings(commonSettings: _*).settings(
+	libraryDependencies ++= {
+		Seq(
+			Libraries.ScalaTest,
+			Libraries.Apache.Lang3,
+			Libraries.Apache.CommonsIO
+		) ++ Spark.Core
+	}
+).dependsOn(common % "test->test;compile->compile", model % "test->test;compile->compile")
 	.enablePlugins(PackPlugin)
