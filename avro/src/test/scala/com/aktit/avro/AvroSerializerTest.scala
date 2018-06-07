@@ -11,21 +11,34 @@ import org.scalatest.Matchers._
 class AvroSerializerTest extends FunSuite
 {
 
-	val x = X(5, "hello")
+	val x1 = XV1(5, "hello")
+	val x2 = XV1(6, "world")
 
-	val serializer = new AvroSerializer[X]
+	val serializerV1 = new AvroSerializer[XV1]
+	val serializerV2 = new AvroSerializer[XV2]
 
-	test("serialize/deserialize") {
-		val data = serializer.serializeSingleBinary(x)
-		serializer.deserializeSingleBinary(data) should be(x)
+	test("serialize/deserialize binary") {
+		val data = serializerV1.serializeSingleBinary(x1)
+		serializerV1.deserializeSingleBinary(data) should be(x1)
+	}
+
+	test("serialize/deserialize with schema") {
+		val data = serializerV1.serializeWithSchema(Seq(x1, x2))
+		serializerV1.deserializeWithSchema(data) should be(Seq(x1, x2))
 	}
 
 	test("bytesize") {
-		val avroSz = serializer.serializeSingleBinary(x).length
-		val javaSz = SerializationUtils.serialize(x).length
+		val avroSz = serializerV1.serializeSingleBinary(x1).length
+		val javaSz = SerializationUtils.serialize(x1).length
 		avroSz should be < javaSz
+	}
 
+	test("schema compatibility") {
+		val data = serializerV1.serializeWithSchema(Seq(x1))
+		serializerV2.deserializeWithSchema(data) should be(Seq(XV2(5, 0, "hello")))
 	}
 }
 
-case class X(i: Int, s: String)
+case class XV1(i: Int, s: String)
+
+case class XV2(i: Int, j: Int, s: String)

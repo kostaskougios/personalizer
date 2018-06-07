@@ -26,4 +26,17 @@ class AvroSerializer[T: SchemaFor : ToRecord : FromRecord]
 		val ais = AvroInputStream.binary(new ByteArrayInputStream(a))
 		try ais.iterator.next finally ais.close()
 	}
+
+	def serializeWithSchema(ts: Seq[T]): Array[Byte] = {
+		val bos = new ByteArrayOutputStream(8192)
+		val aos = AvroOutputStream.data[T](bos)
+		try ts.foreach(t => aos.write(t)) finally aos.close()
+		bos.close()
+		bos.toByteArray
+	}
+
+	def deserializeWithSchema(a: Array[Byte]): Seq[T] = {
+		val ais = AvroInputStream.data[T](a)
+		try ais.iterator.toSeq finally ais.close()
+	}
 }
