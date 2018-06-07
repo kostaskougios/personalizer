@@ -82,5 +82,5 @@ lazy val exampleSocialNetwork = project.settings(commonSettings: _*).settings(
 			Libraries.Apache.CommonsIO
 		) ++ Spark.Core
 	}
-).dependsOn(common % "test->test;compile->compile", model % "test->test;compile->compile")
+).dependsOn(common % "test->test;compile->compile", model % "test->test;compile->compile", avro)
 	.enablePlugins(PackPlugin)
