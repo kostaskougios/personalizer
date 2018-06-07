@@ -1,5 +1,6 @@
 package com.aktit.avro
 
+import com.aktit.avro.testdtos.{XV1, XV2}
 import org.apache.commons.lang3.SerializationUtils
 import org.scalatest.FunSuite
 import org.scalatest.Matchers._
@@ -39,6 +40,3 @@ class AvroSerializerTest extends FunSuite
 	}
 }
 
-case class XV1(i: Int, s: String)
-
-case class XV2(i: Int, j: Int, s: String)
