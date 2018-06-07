@@ -8,7 +8,7 @@ import com.sksamuel.avro4s._
   * @author kostas.kougios
   *         07/06/18 - 19:53
   */
-class AvroVersionedSerdes[T: SchemaFor : ToRecord : FromRecord] private(version: Byte)
+class AvroVersionedSerdes[T: SchemaFor : ToRecord : FromRecord] private(val version: Byte)
 {
 	def serializeOne(t: T): Array[Byte] = serialize(Seq(t))
 

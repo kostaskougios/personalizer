@@ -51,7 +51,7 @@ lazy val model = project.settings(commonSettings: _*).settings(
 	}
 )
 
-lazy val collectorService = project.settings(commonSettings: _*).settings(
+lazy val producers = project.settings(commonSettings: _*).settings(
 	libraryDependencies ++= {
 		Seq(
 			Libraries.ScalaTest,
