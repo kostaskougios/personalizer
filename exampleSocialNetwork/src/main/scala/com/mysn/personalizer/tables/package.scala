@@ -8,6 +8,11 @@ import com.aktit.avro.AvroVersionedSerdes
   */
 package object tables
 {
+	// the latest table version
 	type Post = v2.Post
-	val PostSerializer = Seq(AvroVersionedSerdes[v1.Post](1), AvroVersionedSerdes[v2.Post](2))
+	// All table versions. We can drop the table versions that we no more have serialized data
+	val PostSerializers = Seq(
+		AvroVersionedSerdes[v1.Post](1),
+		AvroVersionedSerdes[v2.Post](2)
+	)
 }
