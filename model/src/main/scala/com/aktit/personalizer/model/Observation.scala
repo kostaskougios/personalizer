@@ -3,7 +3,7 @@ package com.aktit.personalizer.model
 import java.time.ZonedDateTime
 
 import com.aktit.personalizer.model.serialization.ToBytes
-import com.aktit.personalizer.model.stats.Counter
+import com.aktit.personalizer.model.stats.UserCounter
 
 /**
   * @author kostas.kougios
@@ -25,6 +25,6 @@ object Observation
 
 	trait Detail
 
-	case class IncreaseCounter(counter: Counter) extends Detail
+	case class IncreaseCounter(counter: UserCounter) extends Detail
 
 }
