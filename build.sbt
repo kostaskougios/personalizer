@@ -47,35 +47,20 @@ lazy val model = project.settings(commonSettings: _*).settings(
 			Libraries.ScalaTest,
 			Libraries.Apache.Lang3,
 			Libraries.Apache.CommonsIO
-		) ++ Scala.Xml
+		)
 	}
 )
 
-lazy val xml = project.settings(commonSettings: _*).settings(
+lazy val collectorService = project.settings(commonSettings: _*).settings(
 	libraryDependencies ++= {
 		Seq(
 			Libraries.ScalaTest,
-			Libraries.Apache.CommonsIO,
-			Libraries.Apache.Lang3
-		) ++ Scala.Xml
-	}
-).dependsOn(common % "test->test;compile->compile")
-
-lazy val kafka = project.settings(commonSettings: _*).settings(
-	libraryDependencies ++= {
-		Seq(
-			Libraries.ScalaTest,
-			Spark.Streaming,
-			Kafka.SparkStreaming,
-			Kafka.Clients,
 			Libraries.Apache.Lang3,
 			Libraries.Apache.CommonsIO,
-			Spark.CassandraConnector,
-			Spark.Sql
-		) ++ Spark.Core
+			Kafka.Clients
+		)
 	}
-).dependsOn(common % "test->test;compile->compile", model, avro)
-	.enablePlugins(PackPlugin)
+)
 
 lazy val experiments = project.settings(commonSettings: _*).settings(
 	libraryDependencies ++= {
@@ -86,18 +71,7 @@ lazy val experiments = project.settings(commonSettings: _*).settings(
 			Libraries.Apache.CommonsIO
 		) ++ Spark.Core
 	}
-).dependsOn(common % "test->test;compile->compile", xml)
-	.enablePlugins(PackPlugin)
-
-lazy val loaders = project.settings(commonSettings: _*).settings(
-	libraryDependencies ++= {
-		Seq(
-			Libraries.ScalaTest,
-			Libraries.Apache.Lang3,
-			Libraries.Apache.CommonsIO
-		) ++ Spark.Core
-	}
-).dependsOn(common % "test->test;compile->compile", model, xml)
+).dependsOn(common % "test->test;compile->compile")
 	.enablePlugins(PackPlugin)
 
 lazy val exampleSocialNetwork = project.settings(commonSettings: _*).settings(
