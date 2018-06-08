@@ -26,8 +26,9 @@ object Simulation extends App
 		val viewProducer = producerFactory.producer(View)
 
 		for (i <- 1 to 1000) {
-			postProducer.produce(Post.row(i, s"hello world $i", Some(s"Hello world content $i"), None))
-			viewProducer.produce(View.row(UTCDateTime.now, s"http://my.social/view/$i"))
+			val time = System.currentTimeMillis
+			postProducer.produce(time, Post.row(i, s"hello world $i", Some(s"Hello world content $i"), None))
+			viewProducer.produce(time, View.row(UTCDateTime.now, s"http://my.social/view/$i"))
 		}
 
 		Thread.sleep(1000)

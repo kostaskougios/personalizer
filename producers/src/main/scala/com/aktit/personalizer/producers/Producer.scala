@@ -13,9 +13,9 @@ import com.aktit.personalizer.model.TableDef
 class Producer[TABLE] private(channel: Channel, latestVersionSerdes: AvroVersionedSerdes[TABLE])
 {
 
-	def produce(row: TABLE): Unit = {
+	def produce(time: Long, row: TABLE): Unit = {
 		val data = latestVersionSerdes.serializeOne(row)
-		channel.send(data)
+		channel.send(time, data)
 	}
 
 }

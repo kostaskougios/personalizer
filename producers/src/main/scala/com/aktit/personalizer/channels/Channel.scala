@@ -6,7 +6,7 @@ package com.aktit.personalizer.channels
   */
 trait Channel
 {
-	def send(data: Array[Byte]): Unit
+	def send(time: Long, data: Array[Byte]): Unit
 }
 
 object Channel

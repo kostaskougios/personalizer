@@ -4,16 +4,16 @@ import java.util.Properties
 
 import com.aktit.personalizer.channels.{Bytes, Channel}
 import org.apache.kafka.clients.producer.{KafkaProducer, ProducerRecord}
-import org.apache.kafka.common.serialization.IntegerSerializer
+import org.apache.kafka.common.serialization.LongSerializer
 
 /**
   * @author kostas.kougios
   *         07/06/18 - 23:39
   */
-class KafkaChannel private(kafkaTopic: String, producer: KafkaProducer[Integer, Bytes]) extends Channel
+class KafkaChannel private(kafkaTopic: String, producer: KafkaProducer[Long, Bytes]) extends Channel
 {
-	override def send(data: Array[Byte]): Unit = {
-		val r = new ProducerRecord[Integer, Bytes](kafkaTopic, data)
+	override def send(time: Long, data: Array[Byte]): Unit = {
+		val r = new ProducerRecord[Long, Bytes](kafkaTopic, time, data)
 		producer.send(r)
 	}
 
@@ -31,14 +31,14 @@ object KafkaChannel
 		val props = new Properties()
 		props.put("bootstrap.servers", brokers.mkString(","))
 		props.put("client.id", getClass.getSimpleName)
-		props.put("key.serializer", classOf[IntegerSerializer])
+		props.put("key.serializer", classOf[LongSerializer])
 		props.put("value.serializer", classOf[NopSerializer])
 
-		val producer = new KafkaProducer[Integer, Bytes](props)
+		val producer = new KafkaProducer[Long, Bytes](props)
 		new Factory(producer)
 	}
 
-	class Factory(producer: KafkaProducer[Integer, Bytes]) extends Channel.Factory
+	class Factory(producer: KafkaProducer[Long, Bytes]) extends Channel.Factory
 	{
 		def channel(kafkaTopic: String): Channel = new KafkaChannel(kafkaTopic, producer)
 
