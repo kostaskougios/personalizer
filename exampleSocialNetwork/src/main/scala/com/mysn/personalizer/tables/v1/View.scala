@@ -8,5 +8,6 @@ import com.aktit.personalizer.model.time.UTCDateTime
   */
 case class View private[tables](
 	time: UTCDateTime,
-	url: String
+	url: String,
+	referrerUrl: String
 )

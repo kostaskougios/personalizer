@@ -28,7 +28,7 @@ object Simulation extends App
 		for (i <- 1 to 1000) {
 			val time = System.currentTimeMillis
 			postProducer.produce(time, Post.row(i, s"hello world $i", Some(s"Hello world content $i"), None))
-			viewProducer.produce(time, View.row(UTCDateTime.now, s"http://my.social/view/$i"))
+			viewProducer.produce(time, View.row(UTCDateTime.now, s"http://my.social/view/$i", s"http://referer$i"))
 		}
 
 		Thread.sleep(1000)
