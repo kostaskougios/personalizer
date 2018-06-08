@@ -5,6 +5,14 @@ import com.aktit.personalizer.producers.Producer
 import com.mysn.personalizer.tables._
 
 /**
+  * Create topics:
+  *
+  * kafka-topics.sh --create --zookeeper server.lan:2181 --replication-factor 1 --partitions 8 --topic social.Post
+  *
+  * Delete topics:
+  *
+  * kafka-topics.sh --zookeeper server.lan:2181 --delete --topic social.Post
+  *
   * @author kostas.kougios
   *         08/06/18 - 00:06
   */

@@ -13,7 +13,7 @@ package object tables
 	// the latest table version
 	object Post extends TableDef[v2.Post]
 	{
-		override def name = "Post"
+		override def name = "social.Post"
 
 		// All table versions. We can drop the table versions that we no more have serialized data
 		override def serdes = VersionedSerializers[v2.Post](
