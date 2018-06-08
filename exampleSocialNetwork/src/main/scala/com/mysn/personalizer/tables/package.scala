@@ -9,8 +9,9 @@ import com.aktit.personalizer.model.TableDef
   */
 package object tables
 {
+
 	// the latest table version
-	class PostDef extends TableDef[v2.Post]
+	object Post extends TableDef[v2.Post]
 	{
 		override def name = "Post"
 
@@ -20,8 +21,7 @@ package object tables
 			AvroVersionedSerdes[v2.Post](2)
 		)
 
+		// use this to create new instances of Post
 		def row = v2.Post.apply _
 	}
-
-	val Post = new PostDef
 }
