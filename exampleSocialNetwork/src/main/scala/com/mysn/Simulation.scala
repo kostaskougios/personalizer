@@ -1,6 +1,7 @@
 package com.mysn
 
 import com.aktit.personalizer.channels.kafka.KafkaChannel
+import com.aktit.personalizer.model.time.UTCDateTime
 import com.aktit.personalizer.producers.Producer
 import com.mysn.personalizer.tables._
 
@@ -22,10 +23,11 @@ object Simulation extends App
 	try {
 		val producerFactory = Producer.factory(channelFactory)
 		val postProducer = producerFactory.producer(Post)
+		val viewProducer = producerFactory.producer(View)
 
 		for (i <- 1 to 1000) {
-			val row = Post.row(i, s"hello world $i", Some(s"Hello world content $i"), None)
-			postProducer.produce(row)
+			postProducer.produce(Post.row(i, s"hello world $i", Some(s"Hello world content $i"), None))
+			viewProducer.produce(View.row(UTCDateTime.now, s"http://my.social/view/$i"))
 		}
 
 		Thread.sleep(1000)
