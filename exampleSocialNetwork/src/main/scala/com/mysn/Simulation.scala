@@ -12,11 +12,12 @@ object Simulation extends App
 {
 	val channelFactory = KafkaChannel.factory(Seq("server.lan:9092"))
 	try {
-		val postProducer = Producer(channelFactory.channel[Post], PostSerializers)
+		val producerFactory = Producer.factory(channelFactory)
+		val postProducer = producerFactory.producer(Post)
 
 		for (i <- 1 to 1000) {
-			postProducer.produce()
-			new Post(5, "hello world", Some("Hello world content"), None)
+			val row = Post.row(i, s"hello world $i", Some(s"Hello world content $i"), None)
+			postProducer.produce(row)
 		}
 
 		Thread.sleep(1000)

@@ -49,7 +49,7 @@ lazy val model = project.settings(commonSettings: _*).settings(
 			Libraries.Apache.CommonsIO
 		)
 	}
-)
+).dependsOn(avro % "test->test;compile->compile")
 
 lazy val producers = project.settings(commonSettings: _*).settings(
 	libraryDependencies ++= {

@@ -2,6 +2,7 @@ package com.aktit.personalizer.producers
 
 import com.aktit.avro.AvroVersionedSerdes
 import com.aktit.personalizer.channels.Channel
+import com.aktit.personalizer.model.TableDef
 
 /**
   * Thread safe producer, use 1 instance per TABLE per jvm
@@ -21,14 +22,13 @@ class Producer[TABLE] private(channel: Channel, latestVersionSerdes: AvroVersion
 
 object Producer
 {
-	def apply[TABLE](channel: Channel, allSerdes: Seq[AvroVersionedSerdes[TABLE]]): Producer[TABLE] = {
-		// we always produce using the latest version
-		val serdes = allSerdes.maxBy(_.version)
-		apply(channel, serdes)
+	def factory(channelFactory: Channel.Factory) = new Factory(channelFactory)
 
-	}
-
-	def apply[TABLE](channel: Channel, latestVersionSerdes: AvroVersionedSerdes[TABLE]): Producer[TABLE] = {
-		new Producer(channel, latestVersionSerdes)
+	class Factory(channelFactory: Channel.Factory)
+	{
+		def producer[TABLE](tableDef: TableDef[TABLE]): Producer[TABLE] = {
+			val serdes = tableDef.serdes.currentVersionSerializer
+			new Producer(channelFactory.channel(tableDef.channelName), serdes)
+		}
 	}
 }

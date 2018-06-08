@@ -8,3 +8,15 @@ trait Channel
 {
 	def send(data: Array[Byte]): Unit
 }
+
+object Channel
+{
+
+	trait Factory
+	{
+		def channel(name: String): Channel
+
+		def close(): Unit
+	}
+
+}
