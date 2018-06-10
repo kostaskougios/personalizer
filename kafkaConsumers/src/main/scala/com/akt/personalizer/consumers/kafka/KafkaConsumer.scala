@@ -3,9 +3,10 @@ package com.akt.personalizer.consumers.kafka
 import com.akt.personalizer.rdd.ChannelInput
 import com.akt.personalizer.rdd.PersonalizerRDDImplicits._
 import com.aktit.personalizer.model.TableDef
+import org.apache.kafka.clients.consumer.ConsumerRecord
 import org.apache.kafka.common.serialization.LongDeserializer
 import org.apache.spark.streaming.StreamingContext
-import org.apache.spark.streaming.dstream.DStream
+import org.apache.spark.streaming.dstream.InputDStream
 import org.apache.spark.streaming.kafka010._
 
 /**
@@ -14,13 +15,13 @@ import org.apache.spark.streaming.kafka010._
   */
 object KafkaConsumer
 {
-	def createConsumerRDD[TABLE](
+	def createDirectStream[TABLE](
 		ssc: StreamingContext,
 		tableDef: TableDef[TABLE],
 		kafkaBootstrapServers: String,
 		kafkaExtraParams: Map[String, Object] = Map.empty,
 		locationStrategy: LocationStrategy = LocationStrategies.PreferConsistent
-	): DStream[ChannelInput] = {
+	): InputDStream[ConsumerRecord[Long, Array[Byte]]] = {
 		val topics = Set(tableDef.channelName)
 
 		val kafkaParams = Map[String, Object](
@@ -36,7 +37,7 @@ object KafkaConsumer
 			ssc,
 			locationStrategy,
 			ConsumerStrategies.Subscribe[Long, Array[Byte]](topics, kafkaParams)
-		).map(cr => ChannelInput(cr.key, cr.value))
+		)
 	}
 
 	def consume[TABLE](
@@ -47,9 +48,9 @@ object KafkaConsumer
 		kafkaExtraParams: Map[String, Object] = Map.empty,
 		locationStrategy: LocationStrategy = LocationStrategies.PreferConsistent
 	) = {
-		val messages = createConsumerRDD(ssc, tableDef, kafkaBootstrapServers, kafkaExtraParams, locationStrategy)
+		val messages = createDirectStream(ssc, tableDef, kafkaBootstrapServers, kafkaExtraParams, locationStrategy)
 		messages.foreachRDD { rdd =>
-			rdd.saveAsDataCenterFile(dataDir, tableDef)
+			rdd.map(cr => ChannelInput(cr.key, cr.value)).saveAsDataCenterFile(dataDir, tableDef)
 			// The consumer offsets won't automatically be stored. We need to update
 			// them here because we consumed some data.
 			// See https://spark.apache.org/docs/2.3.0/streaming-kafka-0-10-integration.html#storing-offsets

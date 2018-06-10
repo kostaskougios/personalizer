@@ -14,6 +14,17 @@ import com.mysn.personalizer.tables._
   *
   * kafka-topics.sh --zookeeper server.lan:2181 --delete --topic social.Post
   *
+  * Get kafka group details (current offset etc) :
+  *
+  * kafka-consumer-groups.sh --bootstrap-server server.lan:9092 --describe --group social.Post
+  *
+  * Run it:
+  * bin/example-social-network-consumer
+  *
+  * Then view incoming data at
+  *
+  * hdfs dfs -ls /social-network/incoming/social.Post
+  *
   * @author kostas.kougios
   *         08/06/18 - 00:06
   */
