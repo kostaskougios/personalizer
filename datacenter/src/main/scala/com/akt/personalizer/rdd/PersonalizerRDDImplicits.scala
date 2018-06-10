@@ -1,9 +1,9 @@
 package com.akt.personalizer.rdd
 
-import com.aktit.personalizer.model.{TableDef, ToNextVersion}
+import com.akt.personalizer.files.Directories
+import com.aktit.personalizer.model.TableDef
+import org.apache.hadoop.io.{BytesWritable, LongWritable}
 import org.apache.spark.rdd.RDD
-
-import scala.reflect.ClassTag
 
 /**
   * @author kostas.kougios
@@ -15,19 +15,13 @@ object PersonalizerRDDImplicits
 
 	implicit class ConsumerRDD(rdd: RDD[ChannelInput])
 	{
+		def saveAsDataCenterFile[TABLE](dataDir: String, tableDef: TableDef[TABLE]): Unit =
+			saveAsDataCenterFile(Directories.incomingDataNowDirectory(dataDir, tableDef))
 
-		def toTableRows[TABLE: ClassTag](tableDef: TableDef[TABLE]) = {
-			rdd.map {
-				case ChannelInput(time, data) =>
-					val row = makeUpToDate[TABLE](tableDef.serdes.deserializeOneAnyVersion(data))
-					ChannelOutput(time, row)
-			}
-		}
-
-		private def makeUpToDate[TABLE](a: Any): TABLE = a match {
-			case to: ToNextVersion[_] => makeUpToDate(to.toNextVersion)
-			case t: TABLE@unchecked => t
-		}
+		def saveAsDataCenterFile(path: String): Unit = rdd.map {
+			ci =>
+				(new LongWritable(ci.time), new BytesWritable(ci.data))
+		}.saveAsSequenceFile(path)
 	}
 
 }

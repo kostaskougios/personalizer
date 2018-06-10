@@ -16,14 +16,12 @@ object ConsumerJob extends Logging
 	def main(args: Array[String]): Unit = {
 		val conf = new SparkConf().setAppName(getClass.getName)
 		val kafkaBootstrapServers = conf.get("spark.bootstrap.servers")
+		val dataDir = conf.get("spark.data.dir")
 
 		val ssc = new StreamingContext(conf, Seconds(2))
 		try {
 			val postRDD = KafkaConsumer.createConsumerRDD(ssc, Post, kafkaBootstrapServers)
-			postRDD.foreachRDD {
-				rdd =>
-					val rows = rdd.toTableRows(Post)
-			}
+			postRDD.foreachRDD(_.saveAsDataCenterFile(dataDir, Post))
 
 			ssc.start()
 			ssc.awaitTermination()

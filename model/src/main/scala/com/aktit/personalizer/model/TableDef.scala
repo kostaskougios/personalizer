@@ -14,7 +14,14 @@ trait TableDef[TABLE]
 
 	def channelName: String = name
 
+	def incomingDataDirName = name
+
 	def serdes: VersionedSerializers[TABLE]
+
+	def latestVersionOf(a: Any): TABLE = a match {
+		case to: ToNextVersion[_] => latestVersionOf(to.toNextVersion)
+		case t: TABLE@unchecked => t
+	}
 
 	override def toString = s"TableDef($name)"
 }
