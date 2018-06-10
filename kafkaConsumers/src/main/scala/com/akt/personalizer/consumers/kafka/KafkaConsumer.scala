@@ -1,6 +1,7 @@
 package com.akt.personalizer.consumers.kafka
 
 import com.akt.personalizer.rdd.ChannelInput
+import com.akt.personalizer.rdd.PersonalizerRDDImplicits._
 import com.aktit.personalizer.model.TableDef
 import org.apache.kafka.common.serialization.LongDeserializer
 import org.apache.spark.streaming.StreamingContext
@@ -37,4 +38,14 @@ object KafkaConsumer
 			ConsumerStrategies.Subscribe[Long, Array[Byte]](topics, kafkaParams)
 		).map(cr => ChannelInput(cr.key, cr.value))
 	}
+
+	def consume[TABLE](
+		ssc: StreamingContext,
+		tableDef: TableDef[TABLE],
+		kafkaBootstrapServers: String,
+		dataDir: String,
+		kafkaExtraParams: Map[String, Object] = Map.empty,
+		locationStrategy: LocationStrategy = LocationStrategies.PreferConsistent
+	) = createConsumerRDD(ssc, tableDef, kafkaBootstrapServers, kafkaExtraParams, locationStrategy)
+		.foreachRDD(_.saveAsDataCenterFile(dataDir, tableDef))
 }

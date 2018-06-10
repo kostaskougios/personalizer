@@ -1,7 +1,6 @@
 package com.mysn.datacenter.jobs
 
 import com.akt.personalizer.consumers.kafka.KafkaConsumer
-import com.akt.personalizer.rdd.PersonalizerRDDImplicits._
 import com.mysn.personalizer.tables.Post
 import org.apache.spark.SparkConf
 import org.apache.spark.internal.Logging
@@ -20,8 +19,7 @@ object ConsumerJob extends Logging
 
 		val ssc = new StreamingContext(conf, Seconds(2))
 		try {
-			val postRDD = KafkaConsumer.createConsumerRDD(ssc, Post, kafkaBootstrapServers)
-			postRDD.foreachRDD(_.saveAsDataCenterFile(dataDir, Post))
+			KafkaConsumer.consume(ssc, Post, kafkaBootstrapServers, dataDir)
 
 			ssc.start()
 			ssc.awaitTermination()
