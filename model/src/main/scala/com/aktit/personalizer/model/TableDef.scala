@@ -15,4 +15,6 @@ trait TableDef[TABLE]
 	def channelName: String = name
 
 	def serdes: VersionedSerializers[TABLE]
+
+	override def toString = s"TableDef($name)"
 }

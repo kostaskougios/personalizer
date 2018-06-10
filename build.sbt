@@ -94,3 +94,16 @@ lazy val exampleSocialNetwork = project.settings(commonSettings: _*).settings(
 	}
 ).dependsOn(producers, kafkaProducers)
 	.enablePlugins(PackPlugin)
+
+lazy val datacenter = project.settings(commonSettings: _*).settings(
+	libraryDependencies ++= {
+		Seq(
+			Libraries.ScalaTest,
+			Spark.Streaming,
+			Kafka.SparkStreaming,
+			Libraries.Apache.Lang3,
+			Libraries.Apache.CommonsIO,
+			Spark.Sql
+		) ++ Spark.Core
+	}
+).dependsOn(common % "test->test;compile->compile", model % "test->test;compile->compile", avro)
