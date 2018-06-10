@@ -55,8 +55,6 @@ object KafkaConsumer
 			// them here because we consumed some data.
 			// See https://spark.apache.org/docs/2.3.0/streaming-kafka-0-10-integration.html#storing-offsets
 			// regarding other options for storing the kafka offsets.
-			// saveToCassandra is idempotent, it is ok if we replay it more than once if
-			// the code crashes before we store the offsets.
 			val offsetRanges = rdd.asInstanceOf[HasOffsetRanges].offsetRanges
 			messages.asInstanceOf[CanCommitOffsets].commitAsync(offsetRanges)
 		}
