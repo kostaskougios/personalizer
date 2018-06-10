@@ -22,8 +22,7 @@ object ConsumerJob extends Logging
 			val postRDD = KafkaConsumer.createConsumerRDD(ssc, Post, kafkaBootstrapServers)
 			postRDD.foreachRDD {
 				rdd =>
-					val rows = rdd.map(cr => (cr.key, cr.value))
-						.toTableRows(Post)
+					val rows = rdd.toTableRows(Post)
 			}
 
 			ssc.start()

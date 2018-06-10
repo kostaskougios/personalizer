@@ -1,11 +1,11 @@
 package com.akt.personalizer.consumers.kafka
 
+import com.akt.personalizer.rdd.ChannelInput
 import com.aktit.personalizer.model.TableDef
-import org.apache.kafka.clients.consumer.ConsumerRecord
 import org.apache.kafka.common.serialization.LongDeserializer
 import org.apache.spark.streaming.StreamingContext
-import org.apache.spark.streaming.dstream.InputDStream
-import org.apache.spark.streaming.kafka010.{ConsumerStrategies, KafkaUtils, LocationStrategies}
+import org.apache.spark.streaming.dstream.DStream
+import org.apache.spark.streaming.kafka010.{ConsumerStrategies, KafkaUtils, LocationStrategies, LocationStrategy}
 
 /**
   * @author kostas.kougios
@@ -17,8 +17,9 @@ object KafkaConsumer
 		ssc: StreamingContext,
 		tableDef: TableDef[TABLE],
 		kafkaBootstrapServers: String,
-		kafkaExtraParams: Map[String, Object] = Map.empty
-	): InputDStream[ConsumerRecord[Long, Array[Byte]]] = {
+		kafkaExtraParams: Map[String, Object] = Map.empty,
+		locationStrategy: LocationStrategy = LocationStrategies.PreferConsistent
+	): DStream[ChannelInput] = {
 		val topics = Set(tableDef.channelName)
 
 		val kafkaParams = Map[String, Object](
@@ -32,8 +33,8 @@ object KafkaConsumer
 
 		KafkaUtils.createDirectStream(
 			ssc,
-			LocationStrategies.PreferConsistent,
+			locationStrategy,
 			ConsumerStrategies.Subscribe[Long, Array[Byte]](topics, kafkaParams)
-		)
+		).map(cr => ChannelInput(cr.key, cr.value))
 	}
 }

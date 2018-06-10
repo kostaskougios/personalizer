@@ -78,11 +78,10 @@ lazy val kafkaConsumers = project.settings(commonSettings: _*).settings(
 			Libraries.ScalaTest,
 			Libraries.Apache.Lang3,
 			Libraries.Apache.CommonsIO,
-			Spark.Streaming,
 			Kafka.SparkStreaming
 		)
-	} ++ Spark.Core
-).dependsOn(producers % "test->test;compile->compile")
+	}
+).dependsOn(datacenter)
 
 lazy val experiments = project.settings(commonSettings: _*).settings(
 	libraryDependencies ++= {
@@ -101,7 +100,6 @@ lazy val datacenter = project.settings(commonSettings: _*).settings(
 		Seq(
 			Libraries.ScalaTest,
 			Spark.Streaming,
-			Kafka.SparkStreaming,
 			Libraries.Apache.Lang3,
 			Libraries.Apache.CommonsIO,
 			Spark.Sql

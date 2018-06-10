@@ -13,14 +13,14 @@ import scala.reflect.ClassTag
 object PersonalizerRDDImplicits
 {
 
-	implicit class ConsumerRDD(rdd: RDD[(Long, Array[Byte])])
+	implicit class ConsumerRDD(rdd: RDD[ChannelInput])
 	{
 
 		def toTableRows[TABLE: ClassTag](tableDef: TableDef[TABLE]) = {
 			rdd.map {
-				case (time, data) =>
+				case ChannelInput(time, data) =>
 					val row = makeUpToDate[TABLE](tableDef.serdes.deserializeOneAnyVersion(data))
-					(time, row)
+					ChannelOutput(time, row)
 			}
 		}
 
