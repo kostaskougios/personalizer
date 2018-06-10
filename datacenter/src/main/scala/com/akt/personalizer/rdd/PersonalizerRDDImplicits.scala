@@ -3,6 +3,7 @@ package com.akt.personalizer.rdd
 import com.akt.personalizer.files.Directories
 import com.aktit.personalizer.model.TableDef
 import org.apache.hadoop.io.{BytesWritable, LongWritable}
+import org.apache.spark.SparkContext
 import org.apache.spark.rdd.RDD
 
 /**
@@ -24,4 +25,12 @@ object PersonalizerRDDImplicits
 		}.saveAsSequenceFile(path)
 	}
 
+	implicit class DataCenterOps(sc: SparkContext)
+	{
+		def dataCenterFile(path: String) = sc.sequenceFile(path, classOf[LongWritable], classOf[BytesWritable])
+			.map {
+				case (lw, bw) =>
+					ChannelInput(lw.get, bw.getBytes)
+			}
+	}
 }
