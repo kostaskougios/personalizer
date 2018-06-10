@@ -6,7 +6,7 @@ import com.aktit.personalizer.model.TableDef
 import org.apache.kafka.common.serialization.LongDeserializer
 import org.apache.spark.streaming.StreamingContext
 import org.apache.spark.streaming.dstream.DStream
-import org.apache.spark.streaming.kafka010.{ConsumerStrategies, KafkaUtils, LocationStrategies, LocationStrategy}
+import org.apache.spark.streaming.kafka010._
 
 /**
   * @author kostas.kougios
@@ -46,6 +46,18 @@ object KafkaConsumer
 		dataDir: String,
 		kafkaExtraParams: Map[String, Object] = Map.empty,
 		locationStrategy: LocationStrategy = LocationStrategies.PreferConsistent
-	) = createConsumerRDD(ssc, tableDef, kafkaBootstrapServers, kafkaExtraParams, locationStrategy)
-		.foreachRDD(_.saveAsDataCenterFile(dataDir, tableDef))
+	) = {
+		val messages = createConsumerRDD(ssc, tableDef, kafkaBootstrapServers, kafkaExtraParams, locationStrategy)
+		messages.foreachRDD { rdd =>
+			rdd.saveAsDataCenterFile(dataDir, tableDef)
+			// The consumer offsets won't automatically be stored. We need to update
+			// them here because we consumed some data.
+			// See https://spark.apache.org/docs/2.3.0/streaming-kafka-0-10-integration.html#storing-offsets
+			// regarding other options for storing the kafka offsets.
+			// saveToCassandra is idempotent, it is ok if we replay it more than once if
+			// the code crashes before we store the offsets.
+			val offsetRanges = rdd.asInstanceOf[HasOffsetRanges].offsetRanges
+			messages.asInstanceOf[CanCommitOffsets].commitAsync(offsetRanges)
+		}
+	}
 }

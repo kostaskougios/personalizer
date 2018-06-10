@@ -6,9 +6,9 @@ import com.aktit.personalizer.producers.Producer
 import com.mysn.personalizer.tables._
 
 /**
-  * Create topics:
+  * Create topics, i.e.:
   *
-  * kafka-topics.sh --create --zookeeper server.lan:2181 --replication-factor 1 --partitions 8 --topic social.Post
+  * kafka-topics.sh --create --zookeeper server.lan:2181 --replication-factor 1 --partitions 16 --topic social.Post
   *
   * Delete topics:
   *
@@ -25,7 +25,7 @@ object Simulation extends App
 		val postProducer = producerFactory.producer(Post)
 		val viewProducer = producerFactory.producer(View)
 
-		for (i <- 1 to 1000) {
+		for (i <- 1 to 1000000) {
 			val time = System.currentTimeMillis
 			postProducer.produce(time, Post.row(i, s"hello world $i", Some(s"Hello world content $i"), None))
 			viewProducer.produce(time, View.row(UTCDateTime.now, s"http://my.social/view/$i", s"http://referer$i"))

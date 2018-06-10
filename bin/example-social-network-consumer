@@ -1,0 +1,16 @@
+
+echo "submitting spark job"
+
+. bin/spark/mock-spark exampleSocialNetworkDatacenter/target/pack
+
+bin/spark/spark-submit --class com.mysn.datacenter.jobs.ConsumerJob \
+	--driver-memory 1g \
+	--executor-memory 4g \
+	--conf spark.executor.memoryOverhead=512 \
+	--executor-cores 8 \
+	--num-executors 2 \
+	--master yarn \
+	--deploy-mode cluster \
+	--conf spark.bootstrap.servers=server.lan:9092 \
+	--conf spark.data.dir=/social-network \
+	bin/spark/empty.jar
