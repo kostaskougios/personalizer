@@ -3,14 +3,13 @@ package com.mysn.datacenter.jobs
 import com.akt.personalizer.consumers.kafka.KafkaConsumer
 import com.mysn.personalizer.tables.{Post, View}
 import org.apache.spark.SparkConf
-import org.apache.spark.internal.Logging
 import org.apache.spark.streaming.{Seconds, StreamingContext}
 
 /**
   * @author kostas.kougios
   *         10/06/18 - 19:51
   */
-object ConsumerJob extends Logging
+object ConsumerJob
 {
 	def main(args: Array[String]): Unit = {
 		val conf = new SparkConf().setAppName(getClass.getName)
