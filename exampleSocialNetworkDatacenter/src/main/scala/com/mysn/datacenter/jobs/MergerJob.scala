@@ -1,6 +1,7 @@
 package com.mysn.datacenter.jobs
 
 import com.akt.personalizer.rdd.PersonalizerRDDImplicits._
+import com.mysn.personalizer.tables.Post
 import org.apache.spark.{SparkConf, SparkContext}
 
 /**
@@ -15,7 +16,8 @@ object MergerJob
 		val sc = new SparkContext(conf)
 		try {
 			val rdd = sc.dataCenterFile("hdfs://server.lan/social-network/incoming/social.Post/*")
-			println(rdd.count())
+			val x = rdd.map(_.deserialize(Post)).take(10)
+			println(x.toList)
 		} finally {
 			sc.stop()
 		}
