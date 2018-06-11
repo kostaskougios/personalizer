@@ -1,5 +1,9 @@
 package com.akt.personalizer.files
 
+import java.time.ZonedDateTime
+import java.time.format.DateTimeFormatter
+import java.util.UUID
+
 import com.aktit.personalizer.model.TableDef
 
 /**
@@ -10,9 +14,8 @@ object Directories
 {
 	def incomingDataDirectory(dataDir: String): String = dataDir + "/incoming"
 
-	def incomingDataDirectory(dataDir: String, tableDef: TableDef[_]): String =
-		incomingDataDirectory(dataDir) + "/" + tableDef.incomingDataDirName
+	private val formatter = DateTimeFormatter.ISO_DATE_TIME
 
-	def incomingDataNowDirectory(dataDir: String, tableDef: TableDef[_]): String =
-		incomingDataDirectory(dataDir, tableDef) + "/" + System.currentTimeMillis
+	def incomingDataDirectory(dataDir: String, tableDef: TableDef[_], zonedDateTime: ZonedDateTime): String =
+		incomingDataDirectory(dataDir) + "/" + tableDef.incomingDataDirName + "/" + zonedDateTime.format(formatter) + "/" + UUID.randomUUID.toString
 }
