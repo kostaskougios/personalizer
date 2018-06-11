@@ -17,5 +17,5 @@ object Directories
 	private val formatter = DateTimeFormatter.ISO_DATE_TIME
 
 	def incomingDataDirectory(dataDir: String, tableDef: TableDef[_], zonedDateTime: ZonedDateTime): String =
-		incomingDataDirectory(dataDir) + "/" + tableDef.incomingDataDirName + "/" + zonedDateTime.format(formatter) + "/" + UUID.randomUUID.toString
+		incomingDataDirectory(dataDir) + "/" + tableDef.incomingDataDirName + "/" + zonedDateTime.format(formatter).replace(':', '_') + "/" + UUID.randomUUID.toString
 }

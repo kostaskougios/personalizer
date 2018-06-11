@@ -1,5 +1,7 @@
 package com.mysn
 
+import java.util.Date
+
 import com.aktit.personalizer.channels.kafka.KafkaChannel
 import com.aktit.personalizer.model.time.UTCDateTime
 import com.aktit.personalizer.producers.Producer
@@ -30,16 +32,24 @@ import com.mysn.personalizer.tables._
   */
 object Simulation extends App
 {
+	val SimulateMessagesPerMillis = 10
 	val channelFactory = KafkaChannel.factory(Seq("server.lan:9092"))
 	try {
 		val producerFactory = Producer.factory(channelFactory)
 		val postProducer = producerFactory.producer(Post)
 		val viewProducer = producerFactory.producer(View)
 
-		for (i <- 1 to 100000000) {
-			val time = System.currentTimeMillis
-			postProducer.produce(time, Post.row(i, s"hello world $i", Some(s"Hello world content $i"), None))
-			viewProducer.produce(time, View.row(UTCDateTime.now, s"http://my.social/view/$i", s"http://referer$i"))
+		var time = System.currentTimeMillis
+		var numOfMsgs = 0.toLong
+
+		while (true) {
+			for (_ <- 1 to SimulateMessagesPerMillis) {
+				postProducer.produce(time, Post.row(time, s"hello world $time", Some(s"Hello world content $time"), None))
+				viewProducer.produce(time, View.row(UTCDateTime.now, s"http://my.social/view/$time", s"http://referer$time"))
+				numOfMsgs += 1
+			}
+			time += 1
+			if (time % 10000 == 0) println(s"Simulation time is ${new Date(time)} , msgs : $numOfMsgs")
 		}
 	} finally {
 		channelFactory.close()

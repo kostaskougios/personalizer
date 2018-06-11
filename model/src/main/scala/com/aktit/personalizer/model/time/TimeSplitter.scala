@@ -6,7 +6,7 @@ import java.time.{Instant, ZoneOffset, ZonedDateTime}
   * @author kostas.kougios
   *         11/06/18 - 15:26
   */
-abstract class TimeSplitter private(protected val divider: Long)
+abstract class TimeSplitter private(protected val divider: Long) extends Serializable
 {
 	def divideTime(t: Long): Long = t / divider
 
