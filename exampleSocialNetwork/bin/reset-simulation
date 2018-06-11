@@ -1,0 +1,12 @@
+echo "Deleting"
+kafka-topics.sh --zookeeper server.lan:2181 --delete --topic social.Post
+kafka-topics.sh --zookeeper server.lan:2181 --delete --topic social.View
+
+hdfs dfs -rm -r -f /social-network/incoming
+
+sleep 5
+
+echo "Creating"
+kafka-topics.sh --create --zookeeper server.lan:2181 --replication-factor 1 --partitions 16 --topic social.Post
+kafka-topics.sh --create --zookeeper server.lan:2181 --replication-factor 1 --partitions 16 --topic social.View
+

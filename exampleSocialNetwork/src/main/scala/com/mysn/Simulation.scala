@@ -49,7 +49,9 @@ object Simulation extends App
 				numOfMsgs += 1
 			}
 			time += 1
-			if (time % 10000 == 0) println(s"Simulation time is ${new Date(time)} , msgs : $numOfMsgs")
+			if (time % 1000 == 0) Thread.sleep(999)
+
+			if (time % 10000 == 0) println(s"Simulation time is ${new Date(time)} , msgs : $numOfMsgs, wall clock time is ${new Date}")
 		}
 	} finally {
 		channelFactory.close()
