@@ -7,7 +7,7 @@ bin/spark/spark-submit --class com.mysn.datacenter.jobs.ConsumerJob \
 	--driver-memory 1g \
 	--executor-memory 4g \
 	--conf spark.executor.memoryOverhead=512 \
-	--executor-cores 8 \
+	--executor-cores 2 \
 	--num-executors 2 \
 	--master yarn \
 	--deploy-mode cluster \
