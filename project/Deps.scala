@@ -16,7 +16,7 @@ val PhoenixVersion = "5.0.0-alpha-HBase-2.0"
 
 	object Spark
 	{
-		val Version = "2.3.0-hadoop-2.7.6-akt" // NOTE: modify packExcludeJars in build.sbt if you change this
+		val Version = "2.3.1-hadoop-2.7.6-akt" // NOTE: modify packExcludeJars in build.sbt if you change this
 	private val SparkCore = "org.apache.spark" %% "spark-core" % Version
 		val Core = Seq(
 			SparkCore,
