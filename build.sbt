@@ -139,7 +139,7 @@ lazy val datacenter = project.settings(commonSettings: _*).settings(
 			Database.C3P0
 		) ++ Spark.Core
 	}
-).dependsOn(common % "test->test;compile->compile", model % "test->test;compile->compile", avro)
+).dependsOn(common % "test->test;compile->compile", model % "test->test;compile->compile", avro, datacenterTables)
 
 lazy val exampleSocialNetwork = project.settings(commonSettings: _*).settings(
 	libraryDependencies ++= {
