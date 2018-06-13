@@ -99,4 +99,10 @@ val PhoenixVersion = "5.0.0-alpha-HBase-2.0"
 		val C3P0 = "com.mchange" % "c3p0" % "0.9.5.2"
 	}
 
+	object Inject
+	{
+		val Guice = "com.google.inject" % "guice" % "4.1.0"
+		val ScalaGuice = "net.codingwell" %% "scala-guice" % "4.1.0"
+	}
+
 }

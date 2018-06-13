@@ -126,6 +126,20 @@ lazy val datacenterTables = project.settings(
 	}
 )
 
+lazy val dao = project.settings(commonSettings: _*).settings(
+	libraryDependencies ++= {
+		Seq(
+			Libraries.ScalaTest,
+			Libraries.Apache.Lang3,
+			Libraries.Apache.CommonsIO,
+			Slick.Slick,
+			Database.H2Test,
+			Database.C3P0,
+			Inject.Guice
+		)
+	}
+).dependsOn(common, model, datacenterTables)
+
 lazy val datacenter = project.settings(commonSettings: _*).settings(
 	libraryDependencies ++= {
 		Seq(
@@ -139,7 +153,7 @@ lazy val datacenter = project.settings(commonSettings: _*).settings(
 			Database.C3P0
 		) ++ Spark.Core
 	}
-).dependsOn(common % "test->test;compile->compile", model % "test->test;compile->compile", avro, datacenterTables)
+).dependsOn(common % "test->test;compile->compile", model % "test->test;compile->compile", avro, dao % "test->test;compile->compile")
 
 lazy val exampleSocialNetwork = project.settings(commonSettings: _*).settings(
 	libraryDependencies ++= {

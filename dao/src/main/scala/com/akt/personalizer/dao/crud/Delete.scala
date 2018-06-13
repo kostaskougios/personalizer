@@ -1,7 +1,7 @@
 package com.akt.personalizer.dao.crud
 
 import com.akt.personalizer.dao.SqlCommands
-import com.akt.personalizer.datacenter.model.Id
+import com.aktit.personalizer.model.Id
 
 import scala.concurrent.Future
 
