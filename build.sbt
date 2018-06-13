@@ -25,7 +25,9 @@ lazy val common = project.settings(commonSettings: _*).settings(
 		Seq(
 			Libraries.ScalaTest,
 			Libraries.Apache.Lang3,
-			Libraries.Apache.CommonsIO
+			Libraries.Apache.CommonsIO,
+			Inject.Guice,
+			Inject.ScalaGuice
 		)
 	}
 )
@@ -135,7 +137,8 @@ lazy val dao = project.settings(commonSettings: _*).settings(
 			Slick.Slick,
 			Database.H2Test,
 			Database.C3P0,
-			Inject.Guice
+			Inject.Guice,
+			Inject.ScalaGuice
 		)
 	}
 ).dependsOn(common, model, tables)

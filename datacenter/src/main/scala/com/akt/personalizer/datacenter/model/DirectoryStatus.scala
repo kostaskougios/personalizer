@@ -1,17 +1,23 @@
 package com.akt.personalizer.datacenter.model
 
+import com.aktit.personalizer.model.Id
+
 /**
   * @author kostas.kougios
   *         13/06/18 - 01:25
   */
-case class DataCenterDirectoryStatus(path: String, status: DataCenterDirectoryStatus.Status)
+case class DirectoryStatus(
+	id: Int,
+	path: String,
+	status: DirectoryStatus.Status
+) extends Id
 
-object DataCenterDirectoryStatus
+object DirectoryStatus
 {
 
 	trait Status
 	{
-		def id: Int
+		def id: Short
 	}
 
 	object UnderCreation extends Status
@@ -30,4 +36,5 @@ object DataCenterDirectoryStatus
 	}
 
 	val Statuses = Seq(UnderCreation, Ready, CanBeDeleted)
+	val StatusesById = Statuses.map(s => (s.id, s)).toMap
 }
