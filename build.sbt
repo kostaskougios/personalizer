@@ -97,7 +97,7 @@ lazy val experiments = project.settings(commonSettings: _*).settings(
 
 lazy val slick = TaskKey[Seq[File]]("gen-tables")
 
-lazy val datacenterTables = project.settings(
+lazy val tables = project.settings(
 	commonSettings,
 	scalacOptions -= "-unchecked",
 	slick := {
@@ -138,7 +138,7 @@ lazy val dao = project.settings(commonSettings: _*).settings(
 			Inject.Guice
 		)
 	}
-).dependsOn(common, model, datacenterTables)
+).dependsOn(common, model, tables)
 
 lazy val datacenter = project.settings(commonSettings: _*).settings(
 	libraryDependencies ++= {
