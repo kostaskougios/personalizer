@@ -1,7 +1,7 @@
 package com.akt.personalizer.consumers.kafka
 
-import com.akt.personalizer.rdd.ChannelInput
-import com.akt.personalizer.rdd.PersonalizerRDDImplicits._
+import com.akt.personalizer.datacenter.rdd.ChannelInput
+import com.akt.personalizer.datacenter.rdd.PersonalizerRDDImplicits._
 import com.aktit.personalizer.model.TableDef
 import com.aktit.personalizer.model.time.TimeSplitter
 import org.apache.kafka.clients.consumer.ConsumerRecord

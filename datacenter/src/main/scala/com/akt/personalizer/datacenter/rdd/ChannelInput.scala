@@ -1,4 +1,4 @@
-package com.akt.personalizer.rdd
+package com.akt.personalizer.datacenter.rdd
 
 import com.aktit.avro.AvroVersionedSerdes
 import com.aktit.personalizer.model.TableDef

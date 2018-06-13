@@ -1,6 +1,6 @@
-package com.akt.personalizer.rdd
+package com.akt.personalizer.datacenter.rdd
 
-import com.akt.personalizer.files.Directories
+import com.akt.personalizer.datacenter.files.Directories
 import com.aktit.personalizer.model.TableDef
 import com.aktit.personalizer.model.time.TimeSplitter
 import com.aktit.utils.TimeMeasure

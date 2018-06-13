@@ -1,0 +1,1 @@
+create table status(path text not null, status smallint not null);

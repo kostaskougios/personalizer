@@ -1,4 +1,4 @@
-package com.akt.personalizer.rdd
+package com.akt.personalizer.datacenter.rdd
 
 /**
   * @author kostas.kougios
