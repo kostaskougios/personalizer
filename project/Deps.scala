@@ -77,7 +77,26 @@ val PhoenixVersion = "5.0.0-alpha-HBase-2.0"
 			val CommonsIO = "commons-io" % "commons-io" % "2.6"
 			val Pool2 = "org.apache.commons" % "commons-pool2" % "2.5.0"
 		}
+	}
 
+	object Slick
+	{
+		val Version = "3.2.1"
+
+		val Slick = "com.typesafe.slick" %% "slick" % Version
+		val CodeGen = "com.typesafe.slick" %% "slick-codegen" % Version
+	}
+
+	object PostGreSql
+	{
+		val Driver = "org.postgresql" % "postgresql" % "42.1.4.jre7"
+	}
+
+	object Database
+	{
+		val H2 = "com.h2database" % "h2" % "1.4.194"
+		val H2Test = H2 % "test"
+		val C3P0 = "com.mchange" % "c3p0" % "0.9.5.2"
 	}
 
 }

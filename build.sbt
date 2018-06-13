@@ -95,6 +95,37 @@ lazy val experiments = project.settings(commonSettings: _*).settings(
 ).dependsOn(common % "test->test;compile->compile")
 	.enablePlugins(PackPlugin)
 
+lazy val slick = TaskKey[Seq[File]]("gen-tables")
+
+lazy val datacenterTables = project.settings(
+	commonSettings,
+	scalacOptions -= "-unchecked",
+	slick := {
+		val dir = sourceDirectory.value
+		val cp = (dependencyClasspath in Compile).value
+		val r = (runner in Compile).value
+		val s = streams.value
+		val outputDir = (dir / "main" / "scala").getPath
+		val url = "jdbc:postgresql://server.lan/personalizer"
+		val username = "personalizer"
+		val password = "123"
+		val jdbcDriver = "org.postgresql.Driver"
+		val slickDriver = "slick.jdbc.PostgresProfile"
+		val pkg = "com.aktit.personalizer.dao.slickgenerated"
+		r.run("slick.codegen.SourceCodeGenerator", cp.files, Array(slickDriver, jdbcDriver, url, outputDir, pkg, username, password), s.log)
+		val fName = outputDir + pkg.replace('.', '/') + "/Tables.scala"
+		Seq(file(fName))
+	},
+	libraryDependencies ++= {
+		import Deps._
+		Seq(
+			Slick.Slick,
+			Slick.CodeGen,
+			PostGreSql.Driver
+		)
+	}
+)
+
 lazy val datacenter = project.settings(commonSettings: _*).settings(
 	libraryDependencies ++= {
 		Seq(
@@ -102,7 +133,10 @@ lazy val datacenter = project.settings(commonSettings: _*).settings(
 			Spark.Streaming,
 			Libraries.Apache.Lang3,
 			Libraries.Apache.CommonsIO,
-			Spark.Sql
+			Spark.Sql,
+			Slick.Slick,
+			Database.H2Test,
+			Database.C3P0
 		) ++ Spark.Core
 	}
 ).dependsOn(common % "test->test;compile->compile", model % "test->test;compile->compile", avro)
@@ -122,7 +156,8 @@ lazy val exampleSocialNetworkDatacenter = project.settings(commonSettings: _*).s
 		Seq(
 			Libraries.ScalaTest,
 			Libraries.Apache.Lang3,
-			Libraries.Apache.CommonsIO
+			Libraries.Apache.CommonsIO,
+			PostGreSql.Driver
 		) ++ Spark.Core
 	}
 ).dependsOn(producers, datacenter, kafkaConsumers, exampleSocialNetwork)
