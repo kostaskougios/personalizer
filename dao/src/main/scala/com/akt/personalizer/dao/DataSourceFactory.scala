@@ -8,7 +8,7 @@ object DataSourceFactory
 {
 	private val log = LoggerFactory.getLogger(getClass)
 
-	def maxConnections = 32
+	def maxConnections = 4
 
 	def c3p0(databaseConfig: DatabaseConfig): DataSource = {
 		log.info(s"Initializing c3p0 datasource, connecting to ${databaseConfig.url}")

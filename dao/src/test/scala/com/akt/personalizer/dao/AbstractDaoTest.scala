@@ -3,14 +3,12 @@ package com.akt.personalizer.dao
 import java.util.UUID
 
 import com.aktit.personalizer.dao.slickgenerated.Tables
-import com.aktit.personalizer.di.{Destroy, GuiceFactory}
+import com.aktit.personalizer.di.GuiceFactory
 import com.google.inject.AbstractModule
 import net.codingwell.scalaguice.InjectorExtensions.ScalaInjector
 import net.codingwell.scalaguice.ScalaModule
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
 import org.scalatest.{BeforeAndAfterAll, FunSuite, Matchers}
-
-import scala.util.Try
 
 abstract class AbstractDaoTest extends FunSuite with Matchers with BeforeAndAfterAll with ScalaFutures with IntegrationPatience
 {
@@ -34,9 +32,6 @@ abstract class AbstractDaoTest extends FunSuite with Matchers with BeforeAndAfte
 	databaseDao.createSchema().futureValue
 
 	override protected def afterAll(): Unit = {
-		modules.collect {
-			case d: Destroy => d
-		}.foreach(module => Try(module.destroy()))
 		guiceFactory.destroy()
 	}
 }

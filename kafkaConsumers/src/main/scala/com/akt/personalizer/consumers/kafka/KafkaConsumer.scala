@@ -2,6 +2,7 @@ package com.akt.personalizer.consumers.kafka
 
 import com.akt.personalizer.datacenter.rdd.ChannelInput
 import com.akt.personalizer.datacenter.rdd.PersonalizerRDDImplicits._
+import com.aktit.personalizer.di.GuiceFactory
 import com.aktit.personalizer.model.TableDef
 import com.aktit.personalizer.model.time.TimeSplitter
 import org.apache.kafka.clients.consumer.ConsumerRecord
@@ -43,6 +44,7 @@ object KafkaConsumer
 
 	def consume[TABLE](
 		ssc: StreamingContext,
+		driverGuice: GuiceFactory,
 		tableDef: TableDef[TABLE],
 		kafkaBootstrapServers: String,
 		dataDir: String,

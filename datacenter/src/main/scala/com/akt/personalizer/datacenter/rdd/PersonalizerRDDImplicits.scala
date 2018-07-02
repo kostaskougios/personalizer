@@ -1,8 +1,12 @@
 package com.akt.personalizer.datacenter.rdd
 
+import com.akt.personalizer.datacenter.dao.DirectoryStatusDao
 import com.akt.personalizer.datacenter.files.Directories
+import com.akt.personalizer.datacenter.model.DirectoryStatus
+import com.aktit.personalizer.di.GuiceFactory
 import com.aktit.personalizer.model.TableDef
 import com.aktit.personalizer.model.time.TimeSplitter
+import com.aktit.personalizer.utils.FutureUtils.FutureEx
 import com.aktit.utils.TimeMeasure
 import org.apache.hadoop.io.{BytesWritable, LongWritable}
 import org.apache.spark.SparkContext
@@ -20,7 +24,7 @@ object PersonalizerRDDImplicits extends Logging
 
 	implicit class ConsumerRDD(rdd: RDD[ChannelInput])
 	{
-		def saveAsDataCenterFile[TABLE](dataDir: String, tableDef: TableDef[TABLE], timeSplitter: TimeSplitter): Unit = {
+		def saveAsDataCenterFile[TABLE](driverGuice: GuiceFactory, dataDir: String, tableDef: TableDef[TABLE], timeSplitter: TimeSplitter): Unit = {
 			val timeMeasure = TimeMeasure()
 
 			timeMeasure.dt("saveAsDataCenterFile") {
@@ -35,6 +39,10 @@ object PersonalizerRDDImplicits extends Logging
 				for (time <- timesSet) {
 					val dt = timeSplitter.toRoundedUTCDateTime(time)
 					val path = Directories.incomingDataDirectory(dataDir, tableDef, dt)
+
+					val directoryStatusDao = driverGuice.injector.instance[DirectoryStatusDao]
+					directoryStatusDao.create(DirectoryStatus(1, path, DirectoryStatus.UnderCreation)).await
+
 					timeMeasure.dt(s"Save $path") {
 						persisted.filter(ci => timeSplitter.divideTime(ci.time) == time)
 							.map {

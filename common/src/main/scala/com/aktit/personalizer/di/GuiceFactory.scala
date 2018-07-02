@@ -4,6 +4,8 @@ import com.google.inject.{AbstractModule, Guice}
 import net.codingwell.scalaguice.InjectorExtensions.ScalaInjector
 import net.codingwell.scalaguice.ScalaModule
 
+import scala.util.Try
+
 class GuiceFactory private(modules: Seq[AbstractModule with ScalaModule])
 {
 	val injector: ScalaInjector = new ScalaInjector(Guice.createInjector(modules.map(_.asInstanceOf[AbstractModule]): _*))
@@ -11,7 +13,7 @@ class GuiceFactory private(modules: Seq[AbstractModule with ScalaModule])
 	def destroy(): Unit = {
 		modules.collect {
 			case d: Destroy => d
-		}.foreach(_.destroy())
+		}.foreach(m => Try(m.destroy()))
 	}
 }
 

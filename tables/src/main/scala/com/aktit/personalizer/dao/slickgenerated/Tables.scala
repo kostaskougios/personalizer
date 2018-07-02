@@ -49,6 +49,9 @@ trait Tables
 		val path: Rep[String] = column[String]("path")
 		/** Database column status SqlType(int2) */
 		val status: Rep[Short] = column[Short]("status")
+
+		/** Uniqueness Index over (path) (database name ix_directory_status_path) */
+		val index1 = index("ix_directory_status_path", path, unique = true)
 	}
 
 	/** Collection-like TableQuery object for table DirectoryStatus */
