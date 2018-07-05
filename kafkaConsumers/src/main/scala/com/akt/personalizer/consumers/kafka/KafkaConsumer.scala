@@ -1,8 +1,7 @@
 package com.akt.personalizer.consumers.kafka
 
-import com.akt.personalizer.datacenter.rdd.ChannelInput
 import com.akt.personalizer.datacenter.rdd.PersonalizerRDDImplicits._
-import com.aktit.personalizer.di.GuiceFactory
+import com.akt.personalizer.datacenter.rdd.{ChannelInput, DriverGuice}
 import com.aktit.personalizer.model.TableDef
 import com.aktit.personalizer.model.time.TimeSplitter
 import org.apache.kafka.clients.consumer.ConsumerRecord
@@ -44,14 +43,13 @@ object KafkaConsumer
 
 	def consume[TABLE](
 		ssc: StreamingContext,
-		driverGuice: GuiceFactory,
 		tableDef: TableDef[TABLE],
 		kafkaBootstrapServers: String,
 		dataDir: String,
 		timeSplitter: TimeSplitter,
 		kafkaExtraParams: Map[String, Object] = Map.empty,
 		locationStrategy: LocationStrategy = LocationStrategies.PreferConsistent
-	) = {
+	)(implicit driverGuice: DriverGuice) = {
 		val messages = createDirectStream(ssc, tableDef, kafkaBootstrapServers, kafkaExtraParams, locationStrategy)
 		messages.foreachRDD { rdd =>
 			rdd.map(cr => ChannelInput(cr.key, cr.value)).saveAsDataCenterFile(dataDir, tableDef, timeSplitter)

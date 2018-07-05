@@ -3,6 +3,7 @@ package com.mysn.datacenter.jobs
 import com.akt.personalizer.consumers.kafka.KafkaConsumer
 import com.akt.personalizer.dao.{DaoModule, DatabaseConfig}
 import com.akt.personalizer.datacenter.DataCenterModule
+import com.akt.personalizer.datacenter.rdd.DriverGuice
 import com.aktit.personalizer.di.GuiceFactory
 import com.aktit.personalizer.model.time.TimeSplitter
 import com.mysn.personalizer.tables.{Post, View}
@@ -27,7 +28,7 @@ object ConsumerJob
 			user = "personalizer",
 			password = "123"
 		)
-		val driverGuice = GuiceFactory(new DataCenterModule, new DaoModule(dbConfig))
+		implicit val driverGuice = DriverGuice(GuiceFactory(new DataCenterModule, new DaoModule(dbConfig)))
 
 		val ssc = new StreamingContext(conf, Seconds(2))
 		try {
