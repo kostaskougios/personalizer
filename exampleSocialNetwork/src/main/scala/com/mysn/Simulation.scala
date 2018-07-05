@@ -8,13 +8,7 @@ import com.aktit.personalizer.producers.Producer
 import com.mysn.personalizer.tables._
 
 /**
-  * Create topics, i.e.:
-  *
-  * kafka-topics.sh --create --zookeeper server.lan:2181 --replication-factor 1 --partitions 16 --topic social.Post
-  *
-  * Delete topics:
-  *
-  * kafka-topics.sh --zookeeper server.lan:2181 --delete --topic social.Post
+  * See bin/reset-simulation
   *
   * Get kafka group details (current offset etc) :
   *
