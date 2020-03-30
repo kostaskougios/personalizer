@@ -54,8 +54,8 @@ object Deps {
   }
 
   object Libraries {
-    val Config = "com.typesafe" % "config" % "1.3.0"
-    val ScalaTest = "org.scalatest" %% "scalatest" % "3.0.5" % "test"
+    val Config = "com.typesafe" % "config" % "1.4.0"
+    val ScalaTest = "org.scalatest" %% "scalatest" % "3.1.1" % "test"
     val Avro4S = "com.sksamuel.avro4s" %% "avro4s-core" % "1.8.3"
 
     val PhoenixClient = Seq(

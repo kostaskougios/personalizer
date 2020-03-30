@@ -7,11 +7,13 @@ import com.aktit.personalizer.di.GuiceFactory
 import com.google.inject.AbstractModule
 import net.codingwell.scalaguice.InjectorExtensions.ScalaInjector
 import net.codingwell.scalaguice.ScalaModule
+import org.scalatest.BeforeAndAfterAll
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
-import org.scalatest.{BeforeAndAfterAll, FunSuite, Matchers}
+import org.scalatest.funsuite.AnyFunSuite
+import org.scalatest.matchers.should.Matchers
 
 abstract class AbstractDaoTest
-    extends FunSuite
+    extends AnyFunSuite
     with Matchers
     with BeforeAndAfterAll
     with ScalaFutures
