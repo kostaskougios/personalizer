@@ -42,7 +42,7 @@ object Deps {
   }
 
   object HBase {
-    val Version = "2.0.0"
+    val Version = "2.2.4"
     val Common = "org.apache.hbase" % "hbase-common" % Version
     val Client = "org.apache.hbase" % "hbase-client" % Version
     val Server = "org.apache.hbase" % "hbase-server" % Version
@@ -50,7 +50,7 @@ object Deps {
 
   object Kafka {
     val SparkStreaming = "org.apache.spark" %% "spark-streaming-kafka-0-10" % Spark.Version exclude ("net.jpountz.lz4", "lz4")
-    val Clients = "org.apache.kafka" % "kafka-clients" % "1.1.0"
+    val Clients = "org.apache.kafka" % "kafka-clients" % "2.4.1"
   }
 
   object Libraries {
