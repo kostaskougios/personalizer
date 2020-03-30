@@ -7,8 +7,8 @@ object Deps {
   object Scala {
     val Reflect = "org.scala-lang" % "scala-reflect" % ScalaVersion
     val Xml = Seq(
-      "org.scala-lang.modules" %% "scala-xml" % "1.1.0",
-      "com.fasterxml.jackson.module" %% "jackson-module-scala" % "2.9.5"
+      "org.scala-lang.modules" %% "scala-xml" % "1.3.0",
+      "com.fasterxml.jackson.module" %% "jackson-module-scala" % "2.10.3"
     )
   }
 
@@ -38,7 +38,7 @@ object Deps {
     val HBaseSpark = "com.cloudera" % "spark-hbase" % "0.0.2-clabs"
 
     // Note: there is no cassandra connector for spark 2.3.0, so I've build this PR: https://github.com/datastax/spark-cassandra-connector/pull/1175
-    val CassandraConnector = "com.datastax.spark" %% "spark-cassandra-connector" % "2.3.0"
+    val CassandraConnector = "com.datastax.spark" %% "spark-cassandra-connector" % "2.4.3"
   }
 
   object HBase {
