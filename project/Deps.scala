@@ -56,7 +56,7 @@ object Deps {
   object Libraries {
     val Config = "com.typesafe" % "config" % "1.4.0"
     val ScalaTest = "org.scalatest" %% "scalatest" % "3.1.1" % "test"
-    val Avro4S = "com.sksamuel.avro4s" %% "avro4s-core" % "1.8.3"
+    val Avro4S = "com.sksamuel.avro4s" %% "avro4s-core" % "1.8.4"
 
     val PhoenixClient = Seq(
       "org.apache.phoenix" % "phoenix-core" % PhoenixVersion exclude ("sqlline", "sqlline"),
@@ -64,8 +64,6 @@ object Deps {
       HBase.Common,
       HBase.Server
     )
-
-    val SqlLike = "org.scalikejdbc" %% "scalikejdbc" % "2.3.4"
 
     object Apache {
       val CommonsDBCP2 = "org.apache.commons" % "commons-dbcp2" % "2.1"
@@ -77,25 +75,25 @@ object Deps {
   }
 
   object Slick {
-    val Version = "3.2.1"
+    val Version = "3.3.2"
 
     val Slick = "com.typesafe.slick" %% "slick" % Version
     val CodeGen = "com.typesafe.slick" %% "slick-codegen" % Version
   }
 
   object PostGreSql {
-    val Driver = "org.postgresql" % "postgresql" % "42.1.4.jre7"
+    val Driver = "org.postgresql" % "postgresql" % "42.2.11.jre7"
   }
 
   object Database {
-    val H2 = "com.h2database" % "h2" % "1.4.194"
+    val H2 = "com.h2database" % "h2" % "1.4.200"
     val H2Test = H2 % "test"
-    val C3P0 = "com.mchange" % "c3p0" % "0.9.5.2"
+    val C3P0 = "com.mchange" % "c3p0" % "0.9.5.5"
   }
 
   object Inject {
-    val Guice = "com.google.inject" % "guice" % "4.1.0"
-    val ScalaGuice = "net.codingwell" %% "scala-guice" % "4.1.0"
+    val Guice = "com.google.inject" % "guice" % "4.2.3"
+    val ScalaGuice = "net.codingwell" %% "scala-guice" % "4.2.6"
   }
 
 }
