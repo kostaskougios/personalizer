@@ -2,7 +2,6 @@ import sbt._
 
 object Deps {
   val ScalaVersion = "2.11.12" // see mock-spark if you change scala's major version
-  val PhoenixVersion = "5.0.0-alpha-HBase-2.0"
 
   object Scala {
     val Reflect = "org.scala-lang" % "scala-reflect" % ScalaVersion
@@ -24,28 +23,7 @@ object Deps {
     val GraphX = "org.apache.spark" %% "spark-graphx" % Version
     val Sql = "org.apache.spark" %% "spark-sql" % Version
 
-    private val PhoenixExclusions = Seq(
-      ExclusionRule(organization = "org.apache.hadoop"),
-      ExclusionRule("sqlline", "sqlline")
-    )
-    val Phoenix = Seq(
-      "org.apache.phoenix" % "phoenix-spark" % PhoenixVersion excludeAll (PhoenixExclusions: _*),
-      "org.apache.phoenix" % "phoenix-core" % PhoenixVersion excludeAll (PhoenixExclusions: _*)
-    )
-
     val AllContainedInSparkSubmit = Seq(SparkCore, Streaming, GraphX, Sql)
-
-    val HBaseSpark = "com.cloudera" % "spark-hbase" % "0.0.2-clabs"
-
-    // Note: there is no cassandra connector for spark 2.3.0, so I've build this PR: https://github.com/datastax/spark-cassandra-connector/pull/1175
-    val CassandraConnector = "com.datastax.spark" %% "spark-cassandra-connector" % "2.4.3"
-  }
-
-  object HBase {
-    val Version = "2.2.4"
-    val Common = "org.apache.hbase" % "hbase-common" % Version
-    val Client = "org.apache.hbase" % "hbase-client" % Version
-    val Server = "org.apache.hbase" % "hbase-server" % Version
   }
 
   object Kafka {
@@ -57,13 +35,6 @@ object Deps {
     val Config = "com.typesafe" % "config" % "1.4.0"
     val ScalaTest = "org.scalatest" %% "scalatest" % "3.1.1" % "test"
     val Avro4S = "com.sksamuel.avro4s" %% "avro4s-core" % "1.8.4"
-
-    val PhoenixClient = Seq(
-      "org.apache.phoenix" % "phoenix-core" % PhoenixVersion exclude ("sqlline", "sqlline"),
-      HBase.Client,
-      HBase.Common,
-      HBase.Server
-    )
 
     object Apache {
       val CommonsDBCP2 = "org.apache.commons" % "commons-dbcp2" % "2.1"
